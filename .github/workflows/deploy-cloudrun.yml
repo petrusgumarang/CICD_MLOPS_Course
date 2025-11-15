@@ -27,7 +27,7 @@ jobs:
     # 4️⃣ DEPLOY TO CLOUD RUN (FROM SOURCE)
     - name: Deploy to Cloud Run
       env:
-        REGION: ${{ secrets.GCP_REGION }}
+        REGION: asia-southeast2
         SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
       run: |
         gcloud run deploy $SERVICE_NAME \
