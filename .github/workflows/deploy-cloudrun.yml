@@ -31,10 +31,9 @@ jobs:
         SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
         GCP_REGION: ${{ secrets.GCP_REGION }}
       run: |
-        echo "Deploying service: $SERVICE_NAME in project: ${{ secrets.GCP_PROJECT_ID }} region: $GCP_REGION"
-
-        gcloud run deploy "$SERVICE_NAME" \
+        gcloud run deploy $SERVICE_NAME \
           --source . \
-          --region "$GCP_REGION" \
+          --region $GCP_REGION \
           --platform managed \
+          --service-account id-226377422268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
           --allow-unauthenticated
