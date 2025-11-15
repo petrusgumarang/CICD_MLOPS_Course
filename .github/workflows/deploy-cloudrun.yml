@@ -29,11 +29,13 @@ jobs:
         GCP_REGION: ${{ secrets.GCP_REGION }}
       run: |
         echo "Deploying $SERVICE_NAME"
-        gcloud run deploy test-dry-run \
+
+        gcloud run deploy $SERVICE_NAME \
           --source . \
           --region $GCP_REGION \
           --service-account id-22637742268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
           --allow-unauthenticated \
-          --source-bucket gcf-sources-922637742268-asia-southeast2 \
+          --gcs-source-staging-dir=gs://gcf-sources-922637742268-asia-southeast2/staging \
           --quiet
+
 
