@@ -24,13 +24,6 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-    # 3️⃣ ENABLE REQUIRED SERVICES (IDEMPOTENT)
-    - name: Enable APIs
-      run: |
-        gcloud services enable run.googleapis.com \
-          artifactregistry.googleapis.com \
-          cloudbuild.googleapis.com
-
     # 4️⃣ DEPLOY TO CLOUD RUN (FROM SOURCE)
     - name: Deploy to Cloud Run
       env:
