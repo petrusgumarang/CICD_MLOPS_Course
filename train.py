@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import joblib
 
+print("Training v2")
 # Contoh training data untuk demo: y = 2x
 data = pd.DataFrame({
     "x": [1, 2, 3, 4, 5],
