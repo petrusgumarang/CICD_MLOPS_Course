@@ -35,5 +35,5 @@ jobs:
           --source . \
           --region $GCP_REGION \
           --platform managed \
-          --service-account id-226377422268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
+          --service-account id-22637742268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
           --allow-unauthenticated
