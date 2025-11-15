@@ -6,7 +6,7 @@ print("Training v2")
 # Contoh training data untuk demo: y = 2x
 data = pd.DataFrame({
     "x": [1, 2, 3, 4, 5],
-    "y": [70, 140, 210, 280, 350]  # 50x
+    "y": [20, 40, 60, 80, 100]  # 50x
 })
 
 X = data[["x"]]
