@@ -1,4 +1,4 @@
-name: Deploy to Cloud Run (Source-based)
+name: Deploy to Cloud Run (Image-based)
 
 on:
   push:
@@ -22,20 +22,17 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         version: "latest"
- 
-    - name: Deploy to Cloud Run
-      env:
-        SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
-        GCP_REGION: ${{ secrets.GCP_REGION }}
-      run: |
-        echo "Deploying $SERVICE_NAME"
 
-        gcloud run deploy $SERVICE_NAME \
-          --source . \
-          --region $GCP_REGION \
+    - name: Build and Push Container to Artifact Registry
+      run: |
+        gcloud builds submit \
+          --tag asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-repo/${{ secrets.CLOUD_RUN_SERVICE }}
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
+          --image asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-repo/${{ secrets.CLOUD_RUN_SERVICE }} \
+          --region ${{ secrets.GCP_REGION }} \
           --service-account id-22637742268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
           --allow-unauthenticated \
-          --gcs-source-staging-dir=gs://gcf-sources-922637742268-asia-southeast2/staging \
           --quiet
-
-
