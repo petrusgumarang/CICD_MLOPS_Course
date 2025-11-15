@@ -5,7 +5,7 @@ import joblib
 # Contoh training data untuk demo: y = 2x
 data = pd.DataFrame({
     "x": [1, 2, 3, 4, 5],
-    "y": [20, 40, 60, 80, 100]
+    "y": [50, 100, 150, 200, 250]  # 50x
 })
 
 X = data[["x"]]
