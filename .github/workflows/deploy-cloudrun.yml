@@ -1,5 +1,10 @@
 name: Deploy ML API to Cloud Run
 
+permissions:
+  contents: write
+  id-token: write
+  actions: write
+
 on:
   push:
     paths:
