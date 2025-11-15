@@ -1,4 +1,4 @@
-name: Deploy to Cloud Run (Image-based)
+name: Deploy to Cloud Run (Docker image)
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout repo
       uses: actions/checkout@v3
 
     - name: Google Auth
@@ -23,16 +23,35 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         version: "latest"
 
-    - name: Build and Push Container to Artifact Registry
+    - name: Configure Docker for Artifact Registry
       run: |
-        gcloud builds submit \
-          --tag asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-repo/${{ secrets.CLOUD_RUN_SERVICE }}
+        gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+
+    - name: Build & Push Docker image
+      env:
+        PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        REGION: ${{ secrets.GCP_REGION }}
+        SERVICE: ${{ secrets.CLOUD_RUN_SERVICE }}
+      run: |
+        IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/mlops-images/$SERVICE:latest"
+
+        echo "Building image: $IMAGE"
+        docker build -t $IMAGE .
+
+        echo "Pushing image..."
+        docker push $IMAGE
 
     - name: Deploy to Cloud Run
+      env:
+        PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        REGION: ${{ secrets.GCP_REGION }}
+        SERVICE: ${{ secrets.CLOUD_RUN_SERVICE }}
       run: |
-        gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
-          --image asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-repo/${{ secrets.CLOUD_RUN_SERVICE }} \
-          --region ${{ secrets.GCP_REGION }} \
-          --service-account id-22637742268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
+        IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/mlops-images/$SERVICE:latest"
+
+        gcloud run deploy $SERVICE \
+          --image $IMAGE \
+          --platform managed \
+          --region $REGION \
           --allow-unauthenticated \
-          --quiet
+          --service-account github-actions-deployer-test@${PROJECT_ID}.iam.gserviceaccount.com
