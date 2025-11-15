@@ -1,9 +1,3 @@
-Tentu, ini adalah draf yang sangat baik untuk file `README.md` berdasarkan materi Anda.
-
-Saya telah memformatnya agar jelas, profesional, dan mudah diikuti oleh siapa saja yang menemukan repositori Anda di GitHub.
-
------
-
 # MLOps CI/CD: "No Docker on Local" ke Cloud Run
 
 ## 🎯 Brief Singkat
