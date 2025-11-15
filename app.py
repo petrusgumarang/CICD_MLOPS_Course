@@ -21,7 +21,7 @@ class PredictRequest(BaseModel):
 @app.get("/")
 def root():
     return {
-        "message": "Hello Astra team! CI/CD is working 🎉",
+        "message": "Hello Astra team! CI/CD is working and changing as you wish! 🎉",
         "info": "Gunakan POST /predict dengan JSON {'x': number}"
     }
 
