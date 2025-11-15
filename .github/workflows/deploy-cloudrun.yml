@@ -31,9 +31,8 @@ jobs:
         SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
         GCP_REGION: ${{ secrets.GCP_REGION }}
       run: |
-        gcloud run deploy $SERVICE_NAME \
+        gcloud beta run deploy test-dry-run \
           --source . \
-          --region $GCP_REGION \
-          --platform managed \
-          --service-account id-22637742268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
-          --allow-unauthenticated
+          --region asia-southeast2 \
+          --no-allow-unauthenticated \
+          --dry-run=cloudbuild
