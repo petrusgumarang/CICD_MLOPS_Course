@@ -22,7 +22,7 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         version: "latest"
-
+ 
     - name: Deploy to Cloud Run
       env:
         SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
