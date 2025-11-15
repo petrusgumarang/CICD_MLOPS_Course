@@ -31,7 +31,9 @@ jobs:
         echo "Deploying $SERVICE_NAME"
         gcloud run deploy test-dry-run \
           --source . \
-          --region asia-southeast2 \
+          --region $GCP_REGION \
           --service-account id-22637742268-compute-develop@cicd-mlops-training.iam.gserviceaccount.com \
           --allow-unauthenticated \
+          --source-bucket gcf-sources-922637742268-asia-southeast2 \
           --quiet
+
