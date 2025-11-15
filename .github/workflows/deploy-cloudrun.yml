@@ -1,37 +1,35 @@
-name: Deploy to Cloud Run (Source-based, No Dockerfile)
+name: Deploy to Cloud Run
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v3
 
-    # 1️⃣ AUTHENTICATE TO GOOGLE CLOUD
-    - name: Google Auth
+    - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    # 2️⃣ INSTALL GCLOUD
     - name: Setup gcloud CLI
       uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-    # 4️⃣ DEPLOY TO CLOUD RUN (FROM SOURCE)
     - name: Deploy to Cloud Run
       env:
-        REGION: asia-southeast2
         SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
+        GCP_REGION: ${{ secrets.GCP_REGION }}
       run: |
+        echo "Deploying to Cloud Run in region: $GCP_REGION"
         gcloud run deploy $SERVICE_NAME \
           --source . \
-          --region $REGION \
+          --region $GCP_REGION \
           --platform managed \
           --allow-unauthenticated
