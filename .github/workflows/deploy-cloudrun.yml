@@ -2,7 +2,7 @@ name: Deploy to Cloud Run (Source-based)
 
 on:
   push:
-    branches: [ "main" ]   # Sesuaikan kalau kamu pakai branch lain
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -12,27 +12,25 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # 1) Auth ke Google Cloud pakai service account JSON
     - name: Google Auth
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    # 2) Install gcloud dan set default project
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         version: "latest"
 
-    # 3) Deploy ke Cloud Run pake source-based deploy (tanpa Dockerfile)
     - name: Deploy to Cloud Run
       env:
         SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
         GCP_REGION: ${{ secrets.GCP_REGION }}
       run: |
-        gcloud beta run deploy test-dry-run \
+        echo "Deploying $SERVICE_NAME"
+        gcloud run deploy $SERVICE_NAME \
           --source . \
-          --region asia-southeast2 \
-          --no-allow-unauthenticated \
-          --dry-run=cloudbuild
+          --region $GCP_REGION \
+          --allow-unauthenticated \
+          --quiet
