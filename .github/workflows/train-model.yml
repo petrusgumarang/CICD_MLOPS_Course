@@ -1,0 +1,35 @@
+name: Train ML Model
+
+on:
+  push:
+    paths:
+      - 'train.py'
+      - 'data/**'
+      - 'models/**'
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Train model
+      run: python train.py
+
+    - name: Commit updated model.pkl
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add model.pkl
+        git commit -m "auto: update model" || echo "No updates to commit"
+        git push
